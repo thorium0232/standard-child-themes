@@ -1,6 +1,6 @@
 <?php 
 /* 
-Template Name: CMB Homepage 
+Template Name: Homepage Theme 
 */ 
 ?>
 <?php
@@ -12,6 +12,8 @@ Template Name: CMB Homepage
  */
 ?>
 <?php get_header(); ?>
+	<script type="text/javascript" src="<?php bloginfo('stylesheet_directory'); ?>/js/bootstrap-carousel.js"></script>
+	<script type="text/javascript" src="<?php bloginfo('stylesheet_directory'); ?>/js/bootstrap-transition.js"></script>
 <?php $src = wp_get_attachment_image_src( get_post_thumbnail_id($post->ID), array( 5600,1000 ), false, '' );?>
 
 <?php $options = get_option( 'standard_theme_layout_options' ); ?>
@@ -26,40 +28,70 @@ Template Name: CMB Homepage
      <div class="container">
      
       		<div class="row">
-      		<div class="video " >
-      			<img src="<?php esc_url( header_image() ); ?>" width="<?php echo get_custom_header()->width; ?>" height="<?php echo get_custom_header()->height; ?>" alt="<?php bloginfo( 'name' ); ?>">
-    			<?php echo get_post_meta($post->ID, 'vidlink', true); ?>
-      		</div>	
-      			
+      		<div class="carousel span10"> 
+				<div id="myCarousel" class="carousel slide">
+				 <div class="carousel-inner">
+				  <?php
+				   $the_query = new WP_Query(array(
+					'category_name' => 'Home Slider',
+					'posts_per_page' => 1
+					));
+				   while ( $the_query->have_posts() ) :
+				   $the_query->the_post();
+				  ?>
+				   <div class="item active">
+					<?php the_post_thumbnail('large');?>
+					<div class="carousel-caption">
+					 <h4><?php the_title();?></h4>
+					 <p><?php the_excerpt();?></p>
+					</div>
+				   </div><!-- item active -->
+				  <?php
+				   endwhile;
+				   wp_reset_postdata();
+				  ?>
+				  <?php
+				   $the_query = new WP_Query(array(
+					'category_name' => 'Home Slider',
+					'posts_per_page' => 5,
+					'offset' => 1
+					));
+				   while ( $the_query->have_posts() ) :
+				   $the_query->the_post();
+				  ?>
+				   <div class="item">
+					<?php the_post_thumbnail('large');?>
+					<div class="carousel-caption">
+					 <h4><?php the_title();?></h4>
+					 <p><?php the_excerpt();?></p>
+					</div>
+				   </div><!-- item -->
+				  <?php
+				   endwhile;
+				   wp_reset_postdata();
+				  ?>
+				 </div><!-- carousel-inner -->
+				 <a class="left carousel-control" href="#myCarousel" data-slide="prev">‹</a>
+				 <a class="right carousel-control" href="#myCarousel" data-slide="next">›</a>
+				</div><!-- #myCarousel -->
+				</div>      		
       		</div>
       </div>
-      
 </div>
 
 <div id="wrapper">
 	<div class="container">
 		<div class="row">
-			
 			<div id="main" class="span12 clearfix" role="main">
 				<?php if ( have_posts() ) { ?>
 					<?php while ( have_posts() ) {
 						 the_post(); ?>
 						<div id="post-<?php the_ID(); ?> format-standard" <?php post_class( 'post' ); ?>>
 							<div class="post-header clearfix">
-								<h1 class="post-title"><?php the_title(); ?></h1>	
+								<h1 class="post-title ribbon span12"><div class="ribbon-content"><?php the_title(); ?></div></h1>	
 							</div> <!-- /.post-header -->						
 							<div id="content-<?php the_ID(); ?>" class="entry-content">
 								<?php the_content(); ?>
-								<div id="sidebar" class="front_links_side span3"> <!-- start fake sidebar for front page -->
-									<li class="findus" id="contactus"><a>Contact Info</a></li>
-									<li class="findus" id="facebook"><a href="https://www.facebook.com/coolmustachebro"  >facebook</a></li>
-									<li class="findus" id="gplus"><a href="https://plus.google.com/105079073547538274133"  >google+</a></li>
-									<li class="findus" id="twitter"><a href="http://twitter.com/coolmustachebro"  >twitter</a></li>
-									<li class="findus" id="podcast"><a href="http://coolmustachebro.com/class/podcast" >podcast</a></li>
-									<li class="findus" id="blog"><a href="http://coolmustachebro.com/blog" > blog</a></li>
-									
-									
-								</div>
 							</div><!-- /.entry-content -->
 						</div> <!-- /#post- -->
 					<?php } // end while ?>
